@@ -5,6 +5,8 @@
 #include <FEHServo.h>
 #include <FEHRPS.h>
 
+//used as motor power for commands
+//if necessary create second for turning
 #define POWER 25 
 
 //initialization statements
@@ -22,24 +24,26 @@ void rpsXPlus(float x_coordinate)
     {
       if(RPS.X() > x_coordinate)
       {
+      	//ensure motor never directly changes direction
       	if(change==1)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//set motors in reverse
       	rMotor.SetPercent(-POWER);
 			lMotor.SetPercent(-POWER);
 			change=0;
       }
       else if(RPS.X() < x_coordinate)
       {
+      	//ensure motor never directly changes direction
        	if(change==0)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//power motors forward
       	rMotor.SetPercent(POWER);
 			lMotor.SetPercent(POWER); 
 			change=1;    
@@ -56,24 +60,26 @@ void rpsXMinus(float x_coordinate)
     {
         if(RPS.X() > x_coordinate)
         {
+        	//ensure motor never directly changes direction
       	if(change==1)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//power motors forward
       	rMotor.SetPercent(POWER);
 			lMotor.SetPercent(POWER);
 			change=0;
         }
         else if(RPS.X() < x_coordinate)
         {
+        	//ensure motor never directly changes direction
        	if(change==0)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//set motors in reverse
       	rMotor.SetPercent(-POWER);
 			lMotor.SetPercent(-POWER);
 			change=1;
@@ -91,24 +97,26 @@ void rpsYMinus(float y_coordinate)
     {
         if(RPS.Y() > y_coordinate)
         {
+        //ensure motor never directly changes direction
       	if(change==1)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//power motors forward
       	rMotor.SetPercent(POWER);
 			lMotor.SetPercent(POWER);
 			change=0;
         }
         else if(RPS.Y() < y_coordinate)
         {
+        //ensure motor never directly changes direction
        	if(change==0)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//set motors in reverse
       	rMotor.SetPercent(-POWER);
 			lMotor.SetPercent(-POWER);
 			change=1;
@@ -125,24 +133,26 @@ void rpsYPlus(float y_coordinate)
     {
         if(RPS.Y() > y_coordinate)
         {
+        //ensure motor never directly changes direction
       	if(change==1)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//set motors in reverse
       	rMotor.SetPercent(-POWER);
 			lMotor.SetPercent(-POWER);
 			change=0;
         }
         else if(RPS.Y() < y_coordinate)
         {
+        //ensure motor never directly changes direction
        	if(change==0)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//power motors forward
       	rMotor.SetPercent(POWER);
 			lMotor.SetPercent(POWER); 
 			change=1; 
@@ -158,24 +168,26 @@ void rpsTurn(float heading)
 	{
 		if(RPS.Heading() > heading)
 		{
+			//ensure motor never directly changes direction
       	if(change==1)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//power motor for turn right
       	rMotor.SetPercent(-POWER);
 			lMotor.SetPercent(POWER);
 			change=0;
 		}
 		else if(RPS.Heading() < heading)
 		{
+			//ensure motor never directly changes direction
        	if(change==0)
     		{
     			rMotor.Stop();
 				lMotor.Stop();
     		}
-      	//pulse the motors for a short duration in the correct direction
+      	//power motor for turn left
       	rMotor.SetPercent(POWER);
 			lMotor.SetPercent(-POWER); 
 			change=1; 
