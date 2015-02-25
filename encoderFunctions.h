@@ -5,12 +5,23 @@
 #include <FEHServo.h>
 #include <FEHRPS.h>
 
+#define POWER 25
+#define TURNPOWER 25
+#define COUNTS 5
+
 //initialization statements
 ButtonBoard buttons(FEHIO::Bank3);
 DigitalEncoder rEncoder(FEHIO::P2_0);
 DigitalEncoder lEncoder(FEHIO::P2_1);
 FEHMotor rMotor(FEHMotor::Motor0);
 FEHMotor lMotor(FEHMotor::Motor1);
+AnalogInputPin CdS (FEHIO::P0_0);
+
+//wait until the light changes to start the course
+void waitForLightChange()
+{
+	while(CdS.Value()>.6);	
+}
 
 
 //pulse forward measuring using encoders
@@ -105,12 +116,12 @@ void rpsXPlus(float x_coordinate)
         if(RPS.X() > x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(-75,5);
+        pulseForward(-POWER,COUNTS);
         }
         else if(RPS.X() < x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(75,5);
+        pulseForward(POWER,COUNTS);
         }
 	}
 }
@@ -124,12 +135,12 @@ void rpsXMinus(float x_coordinate)
         if(RPS.X() > x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(75,5);
+        pulseForward(POWER,COUNTS);
         }
         else if(RPS.X() < x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(-75,5);
+        pulseForward(-POWER,COUNTS);
         }
 	}
 }
@@ -144,12 +155,12 @@ void rpsYMinus(float y_coordinate)
         if(RPS.Y() > y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(75,5);
+        pulseForward(POWER,COUNTS);
         }
         else if(RPS.Y() < y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(-75,5);
+        pulseForward(-POWER,COUNTS);
         }
 	}
 }
@@ -163,12 +174,12 @@ void rpsYPlus(float y_coordinate)
         if(RPS.Y() > y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(-75,5);
+        pulseForward(-POWER,COUNTS);
         }
         else if(RPS.Y() < y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
-        pulseForward(75,5);
+        pulseForward(POWER,COUNTS);
         }
 	}
 }
@@ -182,12 +193,12 @@ void rpsTurn(float heading)
 		if(RPS.Heading() > heading)
 		{
 			//pulse the motors for a short duration in the correct direction
-			pulseRight(50,2);
+			pulseRight(TURNPOWER,COUNTS);
 			//LCD.WriteLine("HEADING CHECK RIGHT");
 		}
 		else if(RPS.Heading() < heading)
 		{
-			pulseLeft(50,2);
+			pulseLeft(TURNPOWER,COUNTS);
 			//LCD.WriteLine("HEADING CHECK LEFT");
       }
    } 
