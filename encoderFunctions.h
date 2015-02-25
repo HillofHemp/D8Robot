@@ -4,6 +4,7 @@
 #include <FEHMotor.h>
 #include <FEHServo.h>
 #include <FEHRPS.h>
+#include <>
 
 #define POWER 25
 #define TURNPOWER 25
@@ -16,6 +17,12 @@ DigitalEncoder lEncoder(FEHIO::P2_1);
 FEHMotor rMotor(FEHMotor::Motor0);
 FEHMotor lMotor(FEHMotor::Motor1);
 AnalogInputPin CdS (FEHIO::P0_0);
+
+//returns an expected encoder count for a given distance in inches
+int encodeLength(float dist)
+{
+	return dist*33.7408; //test but it should truncate the float to an int
+}
 
 //wait until the light changes to start the course
 void waitForLightChange()
