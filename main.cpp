@@ -8,18 +8,18 @@ int main()
 	RPS.InitializeMenu();
 	waitForLightChange();
 	
-	pulseForward(POWER,439);
+	pulseForward(POWER,encodeLength(13));
 	rpsYMinus(18.5);
 	
 	pulseLeft(POWER,159);
 	rpsTurn(90);
 	
-	pulseForward(POWER,371);
+	pulseForward(POWER,encodeLength(11));
 	rpsXPlus(29.3);
 	
 	pulseLeft(POWER,159);
 	rpsTurn(180);
 	
-	pulseForward(POWER,1485);
+	pulseForward(POWER,encodeLength(44));
 	rpsYPlus(62.5);
 }
