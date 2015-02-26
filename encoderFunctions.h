@@ -4,10 +4,9 @@
 #include <FEHMotor.h>
 #include <FEHServo.h>
 #include <FEHRPS.h>
-#include <>
 
-#define POWER 25
-#define TURNPOWER 25
+#define POWER 10
+#define TURNPOWER 10
 #define COUNTS 5
 
 //initialization statements
@@ -27,7 +26,9 @@ int encodeLength(float dist)
 //wait until the light changes to start the course
 void waitForLightChange()
 {
-	while(CdS.Value()>.6);	
+    LCD.WriteLine("WAITING");
+    while(CdS.Value()>.6);
+    LCD.WriteLine("LIGHT CHANGE");
 }
 
 
