@@ -17,19 +17,19 @@ FEHMotor rMotor(FEHMotor::Motor0);
 FEHMotor lMotor(FEHMotor::Motor1);
 AnalogInputPin CdS (FEHIO::P0_0);
 
-//returns a char array with button order
-char[] getOrder()
+//returns an int with button order
+void getOrder(char order)
 {
 	int red = RPS.RedButtonOrder();
 	int blue = RPS.BlueButtonOrder();
 	int white = RPS.WhiteButtonOrder();
+
+
+    order[red-1] = 'R';
+    order[blue-1] = 'B'
+    order[white-1] = 'W';
 	
-	char[3] order;
-	order[red-1] = 'R';
-	order[blue-1] = 'B';
-	order[white-1] = 'W';
-	
-	return order;
+    return order;
 }
 
 //returns boolean for if all buttons are pressed

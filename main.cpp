@@ -5,12 +5,14 @@
 //main method for performance test 2
 int main()
 {
-	char[] order = getOrder();
-	LCD.WriteLine(order[0]+order[1]+order[2]);
+    RPS.InitializeMenu();
+    int order = getOrder();
+
+    LCD.WriteLine(order);
 	
-	while(!buttons.MiddlePressed)
+    while(!buttons.MiddlePressed())
 	{
-		if(allButtonsPressed)
+        if(allButtonsPressed())
 		{
 			LCD.WriteLine("ALL PRESSED");
 		}
