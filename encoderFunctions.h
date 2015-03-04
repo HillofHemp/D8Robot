@@ -17,6 +17,31 @@ FEHMotor rMotor(FEHMotor::Motor0);
 FEHMotor lMotor(FEHMotor::Motor1);
 AnalogInputPin CdS (FEHIO::P0_0);
 
+//returns a char array with button order
+char[] getOrder()
+{
+	int red = RPS.RedButtonOrder();
+	int blue = RPS.BlueButtonOrder();
+	int white = RPS.WhiteButtonOrder();
+	
+	char[3] order;
+	order[red-1] = 'R';
+	order[blue-1] = 'B';
+	order[white-1] = 'W';
+	
+	return order;
+}
+
+//returns boolean for if all buttons are pressed
+bool allButtonsPressed()
+{
+	if(RPS.RedButtonPressed() && RPS.BlueButtonPressed() && RPS.WhiteButtonPressed())
+	{
+		return true;
+	}
+	return false;
+}
+
 //returns an expected encoder count for a given distance in inches
 int encodeLength(float dist)
 {
