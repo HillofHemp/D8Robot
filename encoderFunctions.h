@@ -8,13 +8,18 @@
 #define POWER 10
 #define TURNPOWER 10
 #define COUNTS 5
+#define LINEACC .5
+#define TURNACC .5
 
+//initialization statements
 //initialization statements
 ButtonBoard buttons(FEHIO::Bank3);
 DigitalEncoder rEncoder(FEHIO::P2_0);
 DigitalEncoder lEncoder(FEHIO::P2_1);
-FEHMotor rMotor(FEHMotor::Motor0);
-FEHMotor lMotor(FEHMotor::Motor1);
+FEHMotor ForkHeight (FEHMotor::Motor0);
+FEHMotor rMotor(FEHMotor::Motor2);
+FEHMotor lMotor(FEHMotor::Motor3);
+FEHServo ForkAngle (FEHServo::Servo0);
 AnalogInputPin CdS (FEHIO::P0_0);
 
 //returns an int with button order
@@ -28,8 +33,6 @@ void getOrder(char order)
     order[red-1] = 'R';
     order[blue-1] = 'B'
     order[white-1] = 'W';
-	
-    return order;
 }
 
 //returns boolean for if all buttons are pressed
@@ -61,9 +64,6 @@ void waitForLightChange()
 //for use withen the rpsForward command
 void pulseForward(int percent, int counts)
 {
-	int lCounts=0; 
-	int rCounts=0;
-	int	sum=0;
 	//Rest encoder counts
 	rEncoder.ResetCounts();
 	lEncoder.ResetCounts();
@@ -73,12 +73,8 @@ void pulseForward(int percent, int counts)
 	lMotor.SetPercent(percent);
 	
 	//move each motor forward the expected number of counts
-	while(sum < counts*2)
-	{
-		lCounts = lEncoder.Counts();
-		rCounts = rEncoder.Counts();
-		sum = lCounts+rCounts;
-	}
+	while((lEncoder.Counts()+rEncoder.Counts()) < counts*2);
+	
 	//turn motors off
 	rMotor.Stop();
 	lMotor.Stop();
@@ -88,9 +84,6 @@ void pulseForward(int percent, int counts)
 //for use withen the rpsTurn command
 void pulseLeft(int percent, int counts)
 {
-	int lCounts=0; 
-	int rCounts=0;
-	int	sum=0;
 	//Rest encoder counts
 	rEncoder.ResetCounts();
 	lEncoder.ResetCounts();
@@ -100,12 +93,7 @@ void pulseLeft(int percent, int counts)
 	lMotor.SetPercent(-percent);
 	
 	//move each motor forward the expected number of counts
-	while(sum < counts*2)
-	{
-		lCounts = lEncoder.Counts();
-		rCounts = rEncoder.Counts();
-		sum = lCounts+rCounts;
-	}
+	while((lEncoder.Counts()+rEncoder.Counts()) < counts*2);
 
 	//turn motors off
 	rMotor.Stop();
@@ -116,9 +104,6 @@ void pulseLeft(int percent, int counts)
 //for use withen the rpsTurn command
 void pulseRight(int percent, int counts)
 {
-	int lCounts=0; 
-	int rCounts=0;
-	int	sum=0;
 	//Rest encoder counts
 	rEncoder.ResetCounts();
 	lEncoder.ResetCounts();
@@ -128,12 +113,7 @@ void pulseRight(int percent, int counts)
 	lMotor.SetPercent(percent);
 	
 	//move each motor forward the expected number of counts
-	while(sum < counts*2)
-	{
-		lCounts = lEncoder.Counts();
-		rCounts = rEncoder.Counts();
-		sum = lCounts+rCounts;
-	}
+	while((lEncoder.Counts()+rEncoder.Counts()) < counts*2);
 
 	//turn motors off
 	rMotor.Stop();
@@ -143,38 +123,48 @@ void pulseRight(int percent, int counts)
 //use RPS to check x location while robot is facing the +x direction
 void rpsXPlus(float x_coordinate)
 {
-//check whether the robot is within an acceptable range
-    while(RPS.X() < x_coordinate - .5 || RPS.X() > x_coordinate + .5)
+	int count = 0;
+	//check whether the robot is within an acceptable range
+    while(RPS.X() < x_coordinate - LINEACC || RPS.X() > x_coordinate + LINEACC)
     {
+    	  LCD.Write(count);
         if(RPS.X() > x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(-POWER,COUNTS);
+        LCD.WriteLine("CHECK BACK");
         }
         else if(RPS.X() < x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(POWER,COUNTS);
+        LCD.WriteLine("CHECK FORWARD");
         }
+        count++;
 	}
 }
 
 //use RPS to check x location while robot is facing the -x direction
 void rpsXMinus(float x_coordinate)
 {
-//check whether the robot is within an acceptable range
-    while(RPS.X() < x_coordinate - .5 || RPS.X() > x_coordinate + .5)
+	int count = 0;
+	//check whether the robot is within an acceptable range
+    while(RPS.X() < x_coordinate - LINEACC || RPS.X() > x_coordinate + LINEACC)
     {
-        if(RPS.X() > x_coordinate)
+    		LCD.Write(count);
+    		if(RPS.X() > x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(POWER,COUNTS);
+        LCD.WriteLine("CHECK BACK");
         }
         else if(RPS.X() < x_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(-POWER,COUNTS);
+        LCD.WriteLine("CHECK FORWARD");
         }
+        count++;
 	}
 }
 
@@ -182,38 +172,47 @@ void rpsXMinus(float x_coordinate)
 //use RPS to check y location while robot is facing the -y direction
 void rpsYMinus(float y_coordinate)
 {
+	int count = 0;
 	//check whether the robot is within an acceptable range
-    while(RPS.Y() < y_coordinate - .5 || RPS.Y() > y_coordinate + .5)
+    while(RPS.Y() < y_coordinate - LINEACC || RPS.Y() > y_coordinate + LINEACC)
     {
+    		LCD.Write(count);
         if(RPS.Y() > y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(POWER,COUNTS);
+        LCD.WriteLine("CHECK BACK");
         }
         else if(RPS.Y() < y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(-POWER,COUNTS);
+        LCD.WriteLine("CHECK FORWARD");
         }
+        count++;
 	}
 }
 
 //use RPS to check y location while robot is facing the +y direction
 void rpsYPlus(float y_coordinate)
 {
+	int count = 0;
 	//check whether the robot is within an acceptable range
-    while(RPS.Y() < y_coordinate - .5 || RPS.Y() > y_coordinate + .5)
+    while(RPS.Y() < y_coordinate - LINEACC || RPS.Y() > y_coordinate + LINEACC)
     {
         if(RPS.Y() > y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(-POWER,COUNTS);
+        LCD.WriteLine("CHECK BACK");
         }
         else if(RPS.Y() < y_coordinate)
         {
         //pulse the motors for a short duration in the correct direction
         pulseForward(POWER,COUNTS);
+        LCD.WriteLine("CHECK FORWARD");
         }
+        count++;
 	}
 }
 
@@ -221,18 +220,21 @@ void rpsYPlus(float y_coordinate)
 //turn using rps and turn subfunctions
 void rpsTurn(float heading)
 {
-	while(RPS.Heading() < heading - 1 || RPS.Heading() > heading + 1)
+	int count = 0;
+	while(RPS.Heading() < heading - TURNACC || RPS.Heading() > heading + TURNACC)
 	{
+		LCD.Write(count);
 		if(RPS.Heading() > heading)
 		{
 			//pulse the motors for a short duration in the correct direction
 			pulseRight(TURNPOWER,COUNTS);
-			//LCD.WriteLine("HEADING CHECK RIGHT");
+			LCD.WriteLine("HEADING CHECK RIGHT");
 		}
 		else if(RPS.Heading() < heading)
 		{
 			pulseLeft(TURNPOWER,COUNTS);
-			//LCD.WriteLine("HEADING CHECK LEFT");
+			LCD.WriteLine("HEADING CHECK LEFT");
       }
+      count++:
    } 
 }
