@@ -1,20 +1,22 @@
-class time
+class Time
 { 
-	private:
-	double start;
+
+    private:
+    double start;
 
 	public:
 	void tic();
-	void area();
+    double toc();
+
 	
-}	
+};
 	
-void tic()
+void Time::tic()
 {
-	start = TimeNow();
+    start = TimeNow();
 }
 
-double toc()
+double Time::toc()
 {
-	return TimeNow() - start;
+    return TimeNow() - start;
 }
