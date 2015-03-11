@@ -1,5 +1,5 @@
-#import <cmath>
-#DEFINE RADTODEG 57.2957795
+#import <math.h>
+#define RADTODEG 57.2957795
 double getAngle(double fx, double fy)	{
 	
 	//Variable declaring
@@ -24,7 +24,8 @@ double getAngle(double fx, double fy)	{
 		angle = -acos(dx/distance)*RADTODEG;
 	}
 	
-	//adjust for offset of course angle
+	//if angle is bigger than 360, return angle to domain 0<angle<360
+	angle = angle%360;
 	//returns the angle for the heading
 	return angle;
 }
