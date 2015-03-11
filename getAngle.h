@@ -26,7 +26,7 @@ double getAngle(double fx, double fy)	{
 	
 	//adjust for offset of course angle
 	//returns the angle for the heading
-	return (angle+90);
+	return angle;
 }
 	
 	
